@@ -192,7 +192,15 @@ const TRACKS=[
  {t:"Smoke",a:"Violette Wautier",k:2},
  {t:"Cologne",a:"beabadoobee",k:3},
  {t:"So Easy (To Fall In Love)",a:"Olivia Dean",k:4},
- {t:"Glue Song",a:"beabadoobee & Clairo",k:5}
+ {t:"Glue Song",a:"beabadoobee & Clairo",k:5},
+ {t:"เพลงรักเพลงแรก (Blooming)",a:"LANDOKMAI",f:"song-07.m4a",d:"“เพลงรักเพลงแรก” means “the first love song”."},
+ {t:"ห้องเล็ก (Wishful)",a:"LANDOKMAI",f:"song-08.m4a",d:"“ห้องเล็ก” means “small room”."},
+ {t:"Fall in love too easily",a:"LANDOKMAI",f:"song-09.m4a"},
+ {t:"ตื่นเช้า (mornings with you)",a:"memories can wait",f:"song-10.m4a",d:"“ตื่นเช้า” means “waking up early”, and the subtitle says it all: mornings with you."},
+ {t:"l-o-v-e",a:"Rocco",f:"song-11.m4a"},
+ {t:"Baby Blue",a:"Rocco",f:"song-12.m4a"},
+ {t:"butterflies.",a:"Brent Faiyaz",f:"song-13.m4a"},
+ {t:"Stop The World I Wanna Get Off With You",a:"Arctic Monkeys",f:"song-14.m4a"}
 ];
 const NOTE="Hey Ash,\n\nI'm not great at saying things out loud, so I made you a website instead. (lol) so I'm letting these songs do the talking. I'm not a romantic person and I honestly have no idea how to flirt. But I really made this for you, on purpose.\n\nAnyway… how many stars do I get? ⭐";
 const SIDE_B="psst… call me at midnight? ♡";
@@ -290,7 +298,7 @@ function renderTracks(){
   ul.innerHTML='';
   TRACKS.forEach((x,i)=>{
     const li=document.createElement('li');
-    li.innerHTML=`<span class="n">0${i+1}</span><div class="t"><b></b><span></span></div><button class="play" aria-label="Play">▶</button>`;
+    li.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')}</span><div class="t"><b></b><span></span></div><button class="play" aria-label="Play">▶</button>`;
     if(x.d){const e=document.createElement('em');e.className='d';e.textContent=x.d;li.querySelector('.t').appendChild(e);}li.querySelector('b').textContent=x.t; li.querySelector('.t span').textContent=x.a;
     li.querySelector('.play').addEventListener('click',()=>playTrack(i));
     ul.appendChild(li);
@@ -308,8 +316,8 @@ function playTrack(i){
   btns.forEach((b,j)=>{b.classList.toggle('on',j===i);b.textContent=j===i?'❚❚':'▶'});
   $('#cass').classList.add('spin');$('#status').textContent=`♪ ${x.t} — ${x.a}`;
   let mode='blob';
-  const go=()=>{try{AU.src=srcOf(x.k,mode);AU.play().catch(()=>{});}catch(e){AU.onerror();}};
-  AU.onerror=()=>{if(mode==='blob'){mode='data';go();}else{$('#status').textContent="couldn't load the audio here 🥲";}};
+  const go=()=>{try{AU.src=x.f?x.f:srcOf(x.k,mode);AU.play().catch(()=>{});}catch(e){AU.onerror();}};
+  AU.onerror=()=>{if(x.f){$('#status').textContent="couldn't load the audio here 🥲";}else if(mode==='blob'){mode='data';go();}else{$('#status').textContent="couldn't load the audio here 🥲";}};
   AU.onended=()=>playTrack((i+1)%TRACKS.length);
   go();
 }
